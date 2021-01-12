@@ -1,0 +1,63 @@
+<section class="cart">
+    <% if(session.cart) {%>
+    <div class="order container mx-auto w-1/2 py-16">
+        <div class="flex items-center border-b border-gray-300 pb-4">
+            <img src="/img/cart-black.png" alt="">
+            <h1 class="font-bold ml-4 text-2xl">Order summary</h1>
+        </div>
+        <div class="pizza-list my-8">
+            <% for(let pizza of Object.values(session.cart.items))  { %>
+            <div class="flex items-center mt-6">
+                <img class="w-24" src="img/<%= pizza.item.image%>" alt="">
+                <div class="flex-1 ml-4">
+                    <h1 class="font-bold"><%= pizza.item.name%></h1>
+                    <span class="text-xs"><%= pizza.item.size%></span>
+                </div>
+                <span class="flex-1"><%= pizza.qty%></span>
+                <span class="font-bold text-lg"><%= pizza.item.price*pizza.qty%></span>
+            </div>
+        <% } %>
+        </div>
+        
+        <hr>
+        <div class="text-right py-4">
+            <div>
+                <span class="text-lg font-bold">Total Amount:</span>
+                <span class="text-2xl font-bold ml-2"><%= session.cart ? session.cart.totalPrice : '' %></span>
+            </div>
+            <div>
+                <form action="/order" method="POST" class="mt-12">
+                    <% if(messages.error) { %>
+                        <span class="text-red-500 text-small"><%= messages.error %></span>
+                        <% } %>
+                        <div>
+                    <input name="phone" class="border border-gray-400 p-2 w-1/2 mb-4" type="phone" placeholder="Phone Number">
+                    <input name="address" class="border border-gray-400 p-2 w-1/2" type="address" placeholder="Address">
+                </div>
+                    <% if(user) { %>
+                        <div>
+                            <button class="py-1 px-6 rounded-full btn-primery mt-6 text-white"  type="submit">Order Now</button>
+                        </div>
+                        <% } else { }%>
+                </form>
+            </div>
+            <% if(!user) { %>
+            <a class="inline-block cursor-pointer py-1 px-6 rounded-full btn-primery mt-6 text-white" href="/login">Login to continue</a>
+            <% } else { }%>
+        </div>
+    </div>
+    <% } else {%>
+
+    <div class="empty-cart py-16">
+        <div class="container mx-auto text-center">
+            <span class="font-bold text-3xl">Cart Empty</span>
+            <p class="text-gray-500 text-lg"> You probably haven't ordered pizza yet.<br>
+            To order a pizza go to hame page.</p>
+            <img class="w-2/5 mx-auto mt-12" src="/img/empty-cart.png" alt="">
+            
+            <a class="inline-block cursor-pointer py-1 px-6 rounded-full btn-primery mt-6 text-white" href="/">Go Back</a>
+        
+        </div>
+    </div>
+    <%}%>
+</section>
